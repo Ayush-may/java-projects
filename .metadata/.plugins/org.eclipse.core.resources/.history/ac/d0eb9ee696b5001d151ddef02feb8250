@@ -1,0 +1,9 @@
+
+public class Ball {
+	
+	int ballSize;
+	int ballX, ballY;
+	Ball(int ballSize, int ballX,int ballY){
+		
+	}
+}

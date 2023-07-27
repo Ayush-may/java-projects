@@ -1,0 +1,14 @@
+
+public class QuickSort {
+
+	int block;
+	int[] color; 
+	Node[] node;
+	int check = 0;
+	int delay;
+
+	QuickSort(Node node[],int color[], int block,int check,int delay){
+		
+	}
+	
+}

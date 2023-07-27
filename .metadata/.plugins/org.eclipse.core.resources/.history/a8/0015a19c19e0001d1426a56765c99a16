@@ -1,0 +1,158 @@
+import javax.swing.*;
+import javax.swing.Timer;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.geom.Rectangle2D;
+import java.util.*;
+
+public class GamePanel extends JPanel implements ActionListener, Runnable {
+	
+	private static final int SCREEN_HEIGHT = 500;
+	private static final int SCREEN_WIDTH = 600;
+	private final int delay = 0;
+	private Box smallBox, bigBox;
+	private JLabel collTxt;
+	private JLabel cntTxt;
+	private Timer timer;
+	private Thread gameThread;
+	private Rectangle2D.Double smallRect, bigRect ;
+	private int cnt;
+	private float timeStamp;
+	
+	
+	GamePanel(){
+		this.setLayout(null);
+		this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
+		this.setBackground(Color.BLACK);
+		timeStamp = 100;
+		double vel = 1/timeStamp;
+		smallBox = new Box(50, 100, SCREEN_HEIGHT-100, 0, 1);
+		bigBox = new Box(100, 400, SCREEN_HEIGHT-150, -vel, 1000000);
+		
+		collTxt = new JLabel("Collision : ");
+		cntTxt = new JLabel( cnt + "" );
+		
+		this.add(collTxt);
+		this.add(cntTxt);
+		collTxt.setFont(new Font("Arial", Font.PLAIN, 25));
+		collTxt.setForeground(Color.WHITE);
+		collTxt.setBounds(100,100,200,50);
+		
+		cntTxt.setFont(new Font("Arial", Font.PLAIN, 25));
+		cntTxt.setForeground(Color.WHITE);
+		cntTxt.setBounds(250,100,200,50);
+		
+		timer = new Timer(delay, this);
+		timer.start();
+		gameThread = new Thread(this);
+		gameThread.start();
+	}
+	
+	public void paint(Graphics g) {
+		super.paint(g);
+		Graphics2D g2d = (Graphics2D)g.create();  
+		
+//		smallRect = new Rectangle2D.Double(smallBox.getX(),smallBox.getY(),smallBox.getSize(),smallBox.getSize());
+		Shape shape = smallRect = new Rectangle2D.Double(smallBox.getX(),smallBox.getY(),smallBox.getSize(),smallBox.getSize());
+		Shape shape2 = bigRect = new Rectangle2D.Double(bigBox.getX(),bigBox.getY(),bigBox.getSize(),bigBox.getSize());
+		
+		g2d.setColor(Color.BLUE);
+		g2d.fill(shape);
+		g2d.setColor(Color.WHITE);
+		g2d.draw(smallRect);
+		
+		g2d.setColor(Color.RED);
+		g2d.fill(shape2);
+		g2d.setColor(Color.WHITE);
+		g2d.draw(bigRect);
+		
+		g.setColor(Color.WHITE);
+		g.drawLine(50,50,50,SCREEN_HEIGHT-50); //Vertical Line
+		g.drawLine(50,SCREEN_HEIGHT-50,SCREEN_WIDTH,SCREEN_HEIGHT-50);  //Horizontal Line
+		
+//		g.setColor(Color.BLUE);
+//		g.fillRect(smallBox.getX(),smallBox.getY(),smallBox.getSize(),smallBox.getSize());
+//		g.setColor(Color.WHITE);
+//		g.drawRect(smallBox.getX(),smallBox.getY(),smallBox.getSize(),smallBox.getSize());
+
+//		g.setColor(Color.RED);
+//		g.fillRect(bigBox.getX(),bigBox.getY(),bigBox.getSize(),bigBox.getSize());
+//		g.setColor(Color.WHITE);
+//		g.drawRect(bigBox.getX(),bigBox.getY(),bigBox.getSize(),bigBox.getSize());
+	}
+
+	public void run() {
+		//game loop
+		long lastTime = System.nanoTime();
+		double amountOfTicks =60.0;
+		double ns = 1000000000 / amountOfTicks;
+		double delta = 0;
+		while(true) {
+			long now = System.nanoTime();
+			delta += (now -lastTime)/ns;
+			lastTime = now;
+			if(delta >=1) {
+				
+				for(int i=0; i<timeStamp; i++) {
+//					repaint();
+					System.out.println("Wokringg");
+					if(smallBox.checkCollision(bigBox)) {
+						
+						System.out.println("here");
+						
+						float v1 = bigBox.bounce(smallBox);
+						float v2 = smallBox.bounce(bigBox);
+						
+						System.out.println(v1+"  "+v2);
+						
+						bigBox.setVel(v1);
+						smallBox.setVel(v2);
+						cnt++;
+					}
+	//				smallBox.checkCollision(bigBox);
+					if(smallBox.checkHitCollision()) {
+						cnt++;
+					}
+					bigBox.updateSpeed();
+					smallBox.updateSpeed();
+				}
+				System.out.println( smallBox.getVelocity() +" "+ bigBox.getVelocity() );
+				System.out.println(cnt);
+				cntTxt.setText(cnt+"");
+				
+				repaint();
+				delta--;
+			}
+		}
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+//		if(smallBox.checkCollision(bigBox)) {
+//			
+//			System.out.println("here");
+//			
+//			float v1 = bigBox.bounce(smallBox);
+//			float v2 = smallBox.bounce(bigBox);
+//			
+//			System.out.println(v1+"  "+v2);
+//			
+//			bigBox.setVel(v1);
+//			smallBox.setVel(v2);
+//			cnt++;
+//		}
+////		smallBox.checkCollision(bigBox);
+//		if(smallBox.checkHitCollision()) {
+//			cnt++;
+//		}
+//		bigBox.updateSpeed();
+//		smallBox.updateSpeed();
+//		System.out.println(cnt);
+//		cntTxt.setText(cnt+"");
+		repaint();
+	}
+	
+	
+	
+}

@@ -1,0 +1,18 @@
+
+public class SlowSort {
+	
+	int block;
+	int[] color; 
+	Node[] node;
+	int check = 0;
+	int delay;
+	
+	SlowSort(Node node[],int color[], int block,int check,int delay){
+		this.node = node;
+		this.color = color;
+		this.block = block;
+		this.check = check;
+		this.delay = delay;
+	}
+	
+}

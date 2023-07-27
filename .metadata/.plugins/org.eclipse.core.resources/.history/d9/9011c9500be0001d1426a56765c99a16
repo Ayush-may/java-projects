@@ -1,0 +1,74 @@
+import javax.swing.*;
+import javax.swing.Timer;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.*;
+
+public class GamePanel extends JPanel implements ActionListener {
+	
+	private static final int SCREEN_HEIGHT = 500;
+	private static final int SCREEN_WIDTH = 600;
+	private final int delay = 1;
+	private Box smallBox, bigBox;
+	private JLabel collTxt;
+	private Timer timer;
+	
+	GamePanel(){
+		this.setLayout(null);
+		this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
+		this.setBackground(Color.BLACK);
+		smallBox = new Box(50, 200, SCREEN_HEIGHT-100, 1, 1);
+		bigBox = new Box(100, 500, SCREEN_HEIGHT-150, -1, 1);
+		
+		collTxt = new JLabel("Collision : ");
+		this.add(collTxt);
+		collTxt.setFont(new Font("Arial", Font.PLAIN, 25));
+		collTxt.setForeground(Color.WHITE);
+		collTxt.setBounds(100,100,200,50);
+		
+		timer = new Timer(delay, this);
+		timer.start();
+	}
+	
+	public void paint(Graphics g) {
+		super.paint(g);
+		g.setColor(Color.WHITE);
+		g.drawLine(50,50,50,SCREEN_HEIGHT-50); //Vertical Line
+		g.drawLine(50,SCREEN_HEIGHT-50,SCREEN_WIDTH,SCREEN_HEIGHT-50);  //Horizontal Line  
+		
+		g.setColor(Color.BLUE);
+		g.fillRect(smallBox.getX(),smallBox.getY(),smallBox.getSize(),smallBox.getSize());
+		g.setColor(Color.WHITE);
+		g.drawRect(smallBox.getX(),smallBox.getY(),smallBox.getSize(),smallBox.getSize());
+
+		g.setColor(Color.RED);
+		g.fillRect(bigBox.getX(),bigBox.getY(),bigBox.getSize(),bigBox.getSize());
+		g.setColor(Color.WHITE);
+		g.drawRect(bigBox.getX(),bigBox.getY(),bigBox.getSize(),bigBox.getSize());
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if(smallBox.checkCollision(bigBox)) {
+			
+			System.out.println("here");
+			
+			int v1 = bigBox.bounce(smallBox);
+			int v2 = smallBox.bounce(bigBox);
+			
+			System.out.println(v1+"  "+v2);
+			
+			bigBox.setVel(v1);
+			smallBox.setVel(v2);
+		}
+//		smallBox.checkCollision(bigBox);
+		smallBox.checkHitCollision();
+		bigBox.updateSpeed();
+		smallBox.updateSpeed();
+		repaint();
+	}
+	
+	
+	
+}

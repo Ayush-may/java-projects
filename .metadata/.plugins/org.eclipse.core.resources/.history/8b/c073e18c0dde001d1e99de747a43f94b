@@ -1,0 +1,90 @@
+import java.util.Scanner;
+
+class Node{
+	public int data;
+	public Node left;
+	public Node right;
+	
+	Node(int data){
+		this.data = data;
+		this.left = null;
+		this.right = null;
+	}
+	
+}
+
+public class TreeTraversal {
+	
+	static Scanner scanner = new Scanner(System.in);
+	
+	public void insertElement(Node root) {
+		int data;
+		System.out.print("Enter Data : ");
+		data = scanner.nextInt();
+		Node temp = root;
+		Node newnode = new Node(data);
+		
+		while(true) {
+			if(temp.data < newnode.data ) {
+				if( temp.right == null) {
+					temp.right = newnode; 
+					break;
+				}
+				temp = temp.right;
+			}
+			else {
+				if( temp.left == null ) {
+					temp.left = newnode;
+					break;
+				}
+				temp = temp.left;
+			}
+		}
+	}
+	
+	public void preOrder(Node root) {
+		Node p = root;
+		if(p != null) {
+			System.out.print(p.data+" ");
+			preOrder(p.left);
+			preOrder(p.right);
+		}
+	}
+
+	public void inOrder(Node root) {
+		Node p = root;
+		if(p != null) {
+			preOrder(p.left);
+			System.out.print(p.data+" ");
+			preOrder(p.right);
+		}
+	}
+
+	public void postOrder(Node root) {
+		Node p = root;
+		if(p != null) {
+			preOrder(p.left);
+			preOrder(p.right);
+			System.out.print(p.data+" ");
+		}
+	}
+	
+	public static void main(String[] args) {
+		TreeTraversal obj = new TreeTraversal();
+		int t = 5;
+		Node root = new Node(40);
+		int values[] = {10,50,24,200};
+		
+		for(int x : values) {
+			
+		}
+		
+		while(t-- != 0) {
+			obj.insertElement(root);
+		}
+		System.out.println("PreOrder : "); obj.preOrder(root);
+		System.out.println("inOrder : "); obj.inOrder(root);
+		System.out.println("postOrder : "); obj.postOrder(root);
+	}
+
+}

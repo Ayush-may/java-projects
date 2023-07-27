@@ -1,0 +1,20 @@
+
+public class Ball {
+	
+	private int ballSize;
+	private int ballX, ballY;
+	Ball(int ballSize, int ballX,int ballY){
+		this.ballSize = ballSize;
+		this.ballX = ballX;
+		this.ballY = ballY;
+	}
+	public int getBallDimX() {
+		return ballSize;
+	}
+	public int getX() {
+		return ballX;
+	}
+	public int getY() {
+		return ballY;
+	}
+}

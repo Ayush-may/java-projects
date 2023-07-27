@@ -1,0 +1,91 @@
+
+public class MergeSort extends Thread{
+
+	int block;
+	int[] color; 
+	Node[] node;
+	int check = 0;
+	int delay;
+	Boolean loopBreak = false;
+	
+	MergeSort(Node node[],int color[], int block,int check,int delay){
+		this.node = node;
+		this.color = color;
+		this.block = block;
+		this.check = check;
+		this.delay = delay;
+	}
+	
+	public void run() {
+		mergeSort(node,0,block-1);
+	}
+	
+	public void mergeSort(Node arr[], int l, int r) {
+		    if (l < r && !loopBreak) {
+		      int m = (l + r) / 2;
+		      mergeSort(arr, l, m);
+		      mergeSort(arr, m + 1, r);
+		      merge(arr, l, m, r);
+		      check = 1;
+		    }
+		    
+	 }
+	
+	public void merge(Node arr[], int p, int q, int r) {
+
+	    int n1 = q - p + 1;
+	    int n2 = r - q;
+
+	    int L[] = new int[n1];
+	    int M[] = new int[n2];
+
+	    for (int i = 0; i < n1; i++) {
+	    	L[i] = arr[p + i].y;
+	    	if(loopBreak) {break;}
+	    }
+	    for (int j = 0; j < n2; j++) {
+	    	M[j] = arr[q + 1 + j].y;
+	    	if(loopBreak) {break;}
+	    }
+	      
+
+	    int i, j, k;
+	    i = 0;
+	    j = 0;
+	    k = p;
+
+	    while (i < n1 && j < n2) {
+	      if (L[i] <= M[j]) {
+	        arr[k].y = L[i];
+	        i++;
+	      } else {
+	        arr[k].y = M[j];
+	        j++;
+	      }
+	      if(loopBreak) {break;}
+	      k++;
+	      sleep();
+	    }
+	    while (i < n1) {
+	      arr[k].y = L[i];
+	      i++;
+	      k++;
+	      if(loopBreak) {break;}
+	      sleep();
+	    }
+
+	    while (j < n2) {
+	      arr[k].y = M[j];
+	      j++;
+	      k++;
+	      if(loopBreak) {break;}
+	      sleep();
+	    }
+	  }
+
+	
+	public void sleep() { try{ Thread.sleep(delay);}catch(Exception e) {} }
+	public void setDelay( int delay ) { this.delay = delay; }
+	public int returnCheck() { return check; }
+	public void setBreak(boolean x) { loopBreak  = x; }
+}

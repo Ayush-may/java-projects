@@ -1,0 +1,70 @@
+
+public class Sort_Algo {
+	
+	int block;
+	int[] color; 
+	Node[] node;
+	int k,m; // k = j & m = i
+	int currentIndex, previousIndex;
+	
+	Sort_Algo(int block,int[] color,Node[] node,int currentIndex,int previousIndex,int k,int m){
+		this.block = block;
+		this.node = node;
+		this.color = color;
+		this.currentIndex = currentIndex ;
+		this.previousIndex = previousIndex ;
+		this.k = k = 0;
+		this.m = m = 0;
+	}
+	
+	public void swap(int a,int b) {
+		int temp = a;
+		a = b;
+		b = temp;
+	}
+	
+	public int bubbleSort() {
+		if(node[k].y < node[k+1].y) {
+			int temp = node[k].y;
+			node[k].y = node[k+1].y;
+			node[k+1].y = temp;
+			currentIndex = k;
+			previousIndex = k+1;
+			color[currentIndex] = 1;
+			System.out.println(currentIndex +"  "+ previousIndex);
+		}	
+		
+		if(m >= block-1) {
+			k = m = 0;
+			return 1;
+		}
+		
+		k++;
+		if(k >= block-1-m) {
+			k = 0;
+			m++;
+		}
+		return 0;
+	}
+	
+	public int insertionSort() {
+		
+		if(k >= 0 && )
+		
+		return 0;
+	}
+	
+	public void resetValue() {
+		k = m = 0;
+		currentIndex = previousIndex = 0;
+	}
+	
+	public int returnCurrentIndex() {
+		return currentIndex;
+	}
+	
+	public int returnPreviousIndex() {
+		return previousIndex;
+	}
+	
+}

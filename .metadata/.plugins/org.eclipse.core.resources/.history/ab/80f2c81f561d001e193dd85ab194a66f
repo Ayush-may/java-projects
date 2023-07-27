@@ -1,0 +1,53 @@
+
+public class InsertionSort extends Thread {
+	int block;
+	int[] color; 
+	Node[] node;
+	int check = 0;
+	int delay;
+	Boolean loopBreak = false;
+	
+	InsertionSort(Node node[],int color[], int block,int check,int delay){
+		this.node = node;
+		this.color = color;
+		this.block = block;
+		this.check = check;
+		this.delay = delay;	
+	}
+	
+	public void run() {
+		insertionSort();
+	}
+	
+	void insertionSort(){
+	    int i, key, j;
+	    for (i = 1; i < block; i++) {
+	        key = node[i].y;
+	        j = i - 1;
+	        color[i] = 2;
+//	        color[j] = 1;
+	        if(loopBreak) {break;}
+	        while (j >= 0 && node[j].y < key) {
+//	        	color[j] = 0;
+	        	node[j+1].y = node[j].y;
+	            j = j - 1;
+	            if(loopBreak) {break;}
+	            sleep();
+//	        	color[j+1] = 1;
+	        }
+	        sleep();
+//	        color[j+1] = 1;
+	        node[j+1].y = key;
+//	        color[j+1] = 0;
+	        color[i] = 0;
+	    }
+	    interrupt();
+	}
+	
+	public void sleep() { try{ Thread.sleep(delay);}catch(Exception e) {} }
+
+	public void setDelay( int delay ) { this.delay = delay; }
+	
+	public int returnCheck() { return check; }
+	public void setBreak(boolean x) { loopBreak  = x; }
+}

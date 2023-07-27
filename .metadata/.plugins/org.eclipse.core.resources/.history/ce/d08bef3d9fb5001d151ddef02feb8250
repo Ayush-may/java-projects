@@ -1,0 +1,39 @@
+
+public class Paddle {
+	
+	private int paddleDimX;
+	private int paddleDimY;
+	private int paddleX ;
+	private int paddleY ;
+	
+	Paddle(int paddleDimX,int paddleDimY,int paddleX, int paddleY){
+		this.paddleX = paddleX;
+		this.paddleY = paddleY;
+		this.paddleDimX = paddleDimX;
+		this.paddleDimY = paddleDimY;
+	}
+	public void collision(int y) {
+		if(y<0) {
+			paddleY = 0;
+		}
+		if(y<)
+	}
+	public void moveY(int y) {
+		this.paddleY -=y;
+	}
+	public int getDimX() {
+		return paddleDimX;
+	}
+	
+	public int getDimY() {
+		return paddleDimY;
+	}
+	
+	public int getX() {
+		return paddleX;
+	}
+	
+	public int getY() {
+		return paddleY;
+	}	
+}

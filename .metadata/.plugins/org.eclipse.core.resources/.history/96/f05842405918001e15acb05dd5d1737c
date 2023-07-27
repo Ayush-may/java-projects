@@ -1,0 +1,54 @@
+
+public class SlowSort {
+	
+	int block;
+	int[] color; 
+	Node[] node;
+	int check = 0;
+	int delay;
+	
+	SlowSort(Node node[],int color[], int block,int check,int delay){
+		this.node = node;
+		this.color = color;
+		this.block = block;
+		this.check = check;
+		this.delay = delay;
+	}
+	
+	static void slow_sort(int A[], int i, int j)
+	{
+	     
+	    // Recursion break condition
+	    if (i >= j)
+	        return;
+	 
+	    // Store the middle value
+	    int m = (i + j) / 2;
+	 
+	    // Recursively call with the
+	    // left half
+	    slow_sort(A, i, m);
+	 
+	    // Recursively call with the
+	    // right half
+	    slow_sort(A, m + 1, j);
+	 
+	    // Swap if the first element is
+	    // lower than second
+	    if (A[j] < A[m])
+	    {
+	        int temp = A[j];
+	        A[j] = A[m];
+	        A[m] = temp;
+	    }
+	 
+	    // Recursively call with the
+	    // array excluding the maximum
+	    // element
+	    slow_sort(A, i, j - 1);
+	}
+	
+	public void sleep() { try{ Thread.sleep(delay);}catch(Exception e) {} }
+	public void setDelay( int delay ) { this.delay = delay; }
+	public int returnCheck() { return check; }
+}

@@ -1,0 +1,23 @@
+
+public class SlowSort {
+	
+	int block;
+	int[] color; 
+	Node[] node;
+	int check = 0;
+	int delay;
+	
+	SlowSort(Node node[],int color[], int block,int check,int delay){
+		this.node = node;
+		this.color = color;
+		this.block = block;
+		this.check = check;
+		this.delay = delay;
+	}
+	
+	
+	
+	public void sleep() { try{ Thread.sleep(delay);}catch(Exception e) {} }
+	public void setDelay( int delay ) { this.delay = delay; }
+	public int returnCheck() { return check; }
+}

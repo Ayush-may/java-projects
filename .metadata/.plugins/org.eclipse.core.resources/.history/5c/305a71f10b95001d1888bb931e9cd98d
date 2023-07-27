@@ -1,0 +1,129 @@
+import javax.swing.*;
+import javax.swing.Timer;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
+
+public class ClickTheBox extends JPanel {
+
+	final int height=500;
+	final int width=500;
+	final int unit=25;
+	//1000 = 1 seconds
+	int delay = 1000;
+	int blockLimitX[] = new int[unit];
+	int blockLimitY[] = new int[unit];
+	int x,y;
+	int xBlock,yBlock;
+	int cnt=0;
+	
+	ArrayList<Integer> arr = new ArrayList<>(); 
+	Timer time ;
+	JFrame frame = new JFrame("Click The Dot");
+	JPanel panel = new JPanel();
+	
+	
+	ClickTheBox(){
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setLocation(300,200);
+//		frame.setSize(width,height);
+		frame.add(this);
+		frame.setResizable(false);
+		frame.setAlwaysOnTop(true);
+		this.setPreferredSize(new Dimension(width,height));
+		frame.setBackground(new Color(188,210,238));
+		frame.pack();
+		//this Timer only works with ActionListeer not with other Listener
+		time = new Timer(delay, new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				System.out.print("Hellow ");
+			}
+		});
+		frame.setVisible(true);
+		
+		initialize();
+		click();
+	} 
+	
+	public void initialize(){
+		for(int i=0;i<height/unit;i++){
+			blockLimitY[i]=blockLimitX[i]= (i*unit);
+		}
+	}
+	
+	public void click(){
+		this.addMouseListener(new MouseAdapter(){
+			public void mousePressed(MouseEvent e){
+				x=e.getX();
+				y=e.getY();
+				System.out.println(x+" "+y);
+				cnt=1;
+				repaint();
+			}
+		});
+	}
+	
+	public void paint(Graphics g){
+//		if this Super is on then the screen will update everytime(by clearing the previous drawings)
+//		super.paint(g);
+		drawCoordinate(g);
+		draw(g);
+		if(cnt==1){
+			drawBlock(g);
+		}
+	}
+	
+	public void drawBlock(Graphics g){
+		for(int i=0;i<=unit;i++){
+			g.setColor(Color.GREEN);
+			g.fillRect(i*blockLimitX[xBlock],blockLimitY[yBlock],unit,unit);
+		}
+	}
+	
+	//this draws the line in Frame
+	public void drawCoordinate(Graphics  g){
+		g.setColor(new Color(37,37,37));
+		for(int i=1 ;i<height/unit; i++ ){
+			//top to down
+			g.drawLine(i*unit, 0, i*unit, height); 
+			//left to right
+			g.drawLine(0, i*unit, height, i*unit); 
+		}
+	}
+	
+	public void draw(Graphics g){
+		check();
+		g.fillRect(blockLimitX[xBlock], blockLimitY[yBlock], unit, unit);
+		time.start();
+	
+//		for(int i=0 ;i <=10 ; i++){
+//			try {
+
+//				System.out.println(i); i++;
+//				Thread.sleep(500);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//		}
+
+	}
+	
+	public void check(){
+		for(int i=0;i<=height/unit;i++){
+			if(x<blockLimitX[i]+unit){
+				xBlock=i;
+				break;
+			}
+		}
+		for(int i=0;i<=height/unit;i++){
+			if(y<blockLimitX[i]+unit){
+				yBlock=i;
+				break;
+			}
+		}
+	}
+	public static void main(String[] args) {
+		new ClickTheBox();
+	}
+
+}

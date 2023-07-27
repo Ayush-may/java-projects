@@ -1,0 +1,12 @@
+
+public class SlowSort {
+	int block;
+	int[] color; 
+	Node[] node;
+	int check = 0;
+	int delay;
+	SlowSort(){
+		
+	}
+	
+}

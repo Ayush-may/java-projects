@@ -1,0 +1,37 @@
+import javax.swing.*;
+import javax.swing.Timer;
+import java.awt.*;
+import java.awt.event.*;
+
+public class GamePanel extends JPanel implements ActionListener , KeyListener{
+	
+	private static final int SCREEN_WIDTH = 1000;
+	private static final int SCREEN_HEIGHT = 400;
+	private static final int DELAY = 5;
+	private Timer timer;
+	GamePanel(){
+		this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
+		this.setBackground(Color.BLACK);
+		timer = new Timer(DELAY, this);
+		timer.start();
+		
+	}
+	
+	public void paint(Graphics g) {
+		super.paint(g);
+	}
+	
+	public void actionPerformed(ActionEvent arg0) {
+		repaint();
+	}
+
+	public void keyPressed(KeyEvent arg0) {
+		
+	}
+	public void keyReleased(KeyEvent arg0) {
+		
+	}
+	public void keyTyped(KeyEvent arg0) {
+		
+	}
+}

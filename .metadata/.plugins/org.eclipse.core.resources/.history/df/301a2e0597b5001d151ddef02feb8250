@@ -1,0 +1,17 @@
+
+public class Ball {
+	
+	int ballSize;
+	int ballX, ballY;
+	Ball(int ballSize, int ballX,int ballY){
+		this.ballSize = ballSize;
+		this.ballX = ballX;
+		this.ballY = ballY;
+	}
+	public int getX() {
+		return ballX;
+	}
+	public int getY() {
+		return ballY;
+	}
+}

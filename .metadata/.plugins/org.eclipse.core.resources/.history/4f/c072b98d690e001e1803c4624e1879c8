@@ -1,0 +1,251 @@
+import java.util.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.*;
+import javax.swing.Timer;
+
+public class GamePanel extends JPanel implements ActionListener {
+	
+	static final int WIDTH = 1000;
+	static final int HEIGHT = 500;
+	int delay = 0;
+	int unit = 25;
+	int block = WIDTH/unit;
+	int k,m;
+	int tempK,tempK2;
+	int tempT ;
+	public int currentIndex, previousIndex;
+	
+	Boolean bSort,iSort,sSort,mSort,qSort;
+	Boolean running = false;
+	
+	Timer timer, stopTimer;
+	String menuItem[] = {"Bubble Sort", "Insertion Sort", "Selection Sort", "Merge Sort", "Quick Sort"};
+	Random random = new Random();
+	Sort_Algo algo ;
+	
+	int[] check = new int[WIDTH+1];
+	int[] color = new int[WIDTH+1];
+	Node[] node = new Node[WIDTH+1];
+	
+	JLabel bestTime = new JLabel("Best Time : (n)");
+	JLabel averageTime = new JLabel("Average Time : ");
+	JLabel worstTime = new JLabel("Worst Time : O(n^2)");
+	JButton startBtn = new JButton("START");
+	JButton stopBtn = new JButton("STOP");
+	JButton shuffleBtn = new JButton("Shuffle");
+	JComboBox menu = new JComboBox(menuItem);
+	
+	GamePanel(){
+		this.setLayout(null);
+		this.setPreferredSize(new Dimension(WIDTH,HEIGHT));
+		this.setBackground(Color.BLACK);
+		
+		k = m = 0;
+		
+		bSort = true;
+		iSort = sSort = mSort = qSort = false;
+		algo = new Sort_Algo(block,color,node, currentIndex, previousIndex,k,m);
+		
+		this.add(bestTime);
+		this.add(averageTime);
+		this.add(worstTime);
+		this.add(startBtn);
+		this.add(stopBtn);
+		this.add(menu);
+		this.add(shuffleBtn);
+		
+		startBtn.setBounds(50,5,100,25);
+		stopBtn.setBounds(180,5,100,25);
+		menu.setBounds(320,5,120,25);
+		shuffleBtn.setBounds(470,5,120,25);
+		
+		bestTime.setForeground(Color.WHITE);
+		averageTime.setForeground(Color.WHITE);
+		worstTime.setForeground(Color.WHITE);
+		bestTime.setBounds(10,50,120,25);
+		averageTime.setBounds(10,70,120,25);
+		worstTime.setBounds(10,90,120,25);
+		
+		startBtn.addActionListener(this);
+		stopBtn.addActionListener(this);
+		shuffleBtn.addActionListener(this);
+		menu.addActionListener(this);
+
+		bSort = true ;
+		iSort = sSort = mSort = qSort = false;
+		
+		timer = new Timer(delay, new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int t = 0;
+				if(running) {
+					if(bSort) {
+						t = algo.bubbleSort();	
+					}
+					else if(iSort) {
+						
+					}
+					else if(sSort) {
+						
+					}
+					else if(mSort) {
+						
+					}
+					else if(qSort) {
+						
+					}
+					if(t == 1) {
+						timer.stop();
+						stopTimer.start();
+					}
+				}
+				repaint();
+			}
+		});
+		
+		stopTimer = new Timer(10, new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				color[tempT] = 2;
+				tempT++;
+				repaint();
+				
+				if(tempT > block) {
+					stopTimer.stop();
+				}
+			}
+		});
+		
+		shuffle();
+	}
+	
+	public void shuffle() {
+		int xCod = 0;
+		tempT = 0;
+		check = new int[HEIGHT+1];
+		node = new Node[HEIGHT+1];
+		algo = new Sort_Algo(block,color,node, currentIndex, previousIndex,k,m);
+		init();
+		
+		for(int i=0;i<=block;i++) {
+			color[i] = 0;
+			while(true) {
+				int temp = random.nextInt(HEIGHT);
+				if(check[temp] == -1 && temp > 35 && temp > 10){
+					check[temp] = 0;
+					node[i] = new Node(xCod,temp+unit);
+					xCod += unit;
+					break;
+				}
+			}
+		}
+		repaint();
+	}
+	
+	public void init() {
+		for(int i=0;i<HEIGHT;i++) {
+			check[i] = -1;
+		}
+	}
+	
+	public void paint(Graphics g) {
+		super.paint(g);
+		
+//		if(running) {
+//			if(node[k].y < node[k+1].y) {
+//				int temp = node[k].y;
+//				node[k].y = node[k+1].y;
+//				node[k+1].y = temp;
+//				tempK = k;
+//				tempK2 = k+1;
+//				color[k] = 1;
+//			}	
+//			
+//			if(m >= block-1) {
+//				running = false;
+//				stopTimer.start();
+//				timer.stop();	
+//				System.out.println("Timer Stop");
+//				k = m = 0;
+//			}
+//			
+//			k++;
+//			if(k >= block-1) {
+//	//			color[tempK2] = 2;
+//				k = 0;
+//				m++;
+//			}
+//		}
+		
+		for(int i=0;i<block;i++) {
+			
+			g.fillRect(node[i].getX(),node[i].getY(),unit,HEIGHT);
+			g.setColor(Color.BLACK);
+			g.drawRect(node[i].getX(),node[i].getY(),unit,HEIGHT);
+			
+			switch(color[i]) {
+				case 0:
+					g.setColor(Color.WHITE);
+					break;
+				case 1:	
+					g.setColor(Color.RED);
+					break;
+				case 2:
+					g.setColor(Color.GREEN);
+					break;
+		  }
+		}
+		
+		g.setColor(Color.WHITE);
+		g.drawLine(0,35,WIDTH,35);
+		
+		if(running) {
+			color[algo.returnCurrentIndex()] = 0;
+		}
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		
+		if(e.getSource() == startBtn) {
+			running = true;
+			timer.restart();
+			stopTimer.stop();
+		}
+		
+		if(e.getSource() == stopBtn) {
+			running = false;
+			timer.stop();
+			stopTimer.stop();
+		}
+
+		if(e.getSource() == shuffleBtn) {
+			shuffle();
+		}
+		
+		if(e.getSource()==menu){
+			if("Bubble Sort"==menu.getSelectedItem()){
+				bSort = true ;
+				iSort = sSort = mSort = qSort = false;
+			}
+			if("Insertion Sort"==menu.getSelectedItem()){
+				iSort = true;
+				bSort = sSort = mSort = qSort = false;
+			}
+			if("Selection Sort"==menu.getSelectedItem()){
+				sSort = true;
+				bSort = iSort = mSort = qSort = false;
+			}
+			if("Merge Sort"==menu.getSelectedItem()){
+				mSort = true;
+				bSort = iSort = sSort = qSort = false;
+			}
+			if("Quick Sort"==menu.getSelectedItem()){
+				qSort = true;
+				bSort = iSort = sSort = mSort = false;
+			}
+		}
+		
+	}
+	
+}

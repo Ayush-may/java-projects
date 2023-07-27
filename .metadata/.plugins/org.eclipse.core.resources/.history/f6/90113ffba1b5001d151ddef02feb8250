@@ -1,0 +1,96 @@
+import javax.swing.*;
+import javax.swing.Timer;
+import java.awt.*;
+import java.awt.event.*;
+
+public class GamePanel extends JPanel implements ActionListener , KeyListener{
+	
+	private static final int SCREEN_WIDTH = 1000;
+	private static final int SCREEN_HEIGHT = 400;
+	private static final int DELAY = 5;
+	private Timer timer;
+	private Paddle player1;
+	private Paddle player2;
+	
+	GamePanel(){
+		player1 = new Paddle(10,60,10,0,SCREEN_HEIGHT,SCREEN_WIDTH);
+		player2 = new Paddle(10,60,SCREEN_WIDTH-20,10,SCREEN_HEIGHT,SCREEN_WIDTH);
+		this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
+		this.setBackground(Color.BLACK);
+		this.setFocusable(true);
+		this.addKeyListener(this);
+		timer = new Timer(DELAY, this);
+		timer.start();
+		
+	}
+	
+	public void paint(Graphics g) {
+		super.paint(g);
+		g.setColor(Color.BLUE);
+		g.fillRect(player1.getX(),player1.getY(),player1.getDimX(),player1.getDimY());
+		g.setColor(Color.RED);
+		g.fillRect(player2.getX(),player2.getY(),player2.getDimX(),player2.getDimY());
+}
+	
+	public void actionPerformed(ActionEvent arg0) {
+		player1.collision();
+		player2.collision();
+		repaint();
+	}
+
+	public void keyPressed(KeyEvent e) {
+		if(e.getKeyCode()==KeyEvent.VK_W) {
+			System.out.println("UP");
+			player1.moveY(30);
+		}
+		if(e.getKeyCode()==KeyEvent.VK_S) {
+			System.out.println("DOWN");
+			player1.moveY(-30);
+		}
+		if(e.getKeyCode()==KeyEvent.VK_UP) {
+			System.out.println("UP");
+			player2.moveY(30);
+		}
+		if(e.getKeyCode()==KeyEvent.VK_DOWN) {
+			System.out.println("DOWN");
+			player2.moveY(-30);
+		}
+	}
+	public void keyReleased(KeyEvent e) {
+		if(e.getKeyCode()==KeyEvent.VK_W) {
+			System.out.println("UP");
+			player1.moveY(15);
+		}
+		if(e.getKeyCode()==KeyEvent.VK_S) {
+			System.out.println("DOWN");
+			player1.moveY(-15);
+		}
+		if(e.getKeyCode()==KeyEvent.VK_UP) {
+			System.out.println("UP");
+			player2.moveY(15);
+		}
+		if(e.getKeyCode()==KeyEvent.VK_DOWN) {
+			System.out.println("DOWN");
+			player2.moveY(-15);
+		}		
+	}
+	public void keyTyped(KeyEvent e) {
+		if(e.getKeyCode()==KeyEvent.VK_W) {
+			System.out.println("UP");
+			player1.moveY(20);
+		}
+		if(e.getKeyCode()==KeyEvent.VK_S) {
+			System.out.println("DOWN");
+			player1.moveY(-20);
+		}
+		if(e.getKeyCode()==KeyEvent.VK_UP) {
+			System.out.println("UP");
+			player2.moveY(20);
+		}
+		if(e.getKeyCode()==KeyEvent.VK_DOWN) {
+			System.out.println("DOWN");
+			player2.moveY(-20);
+		}		
+
+	}
+}

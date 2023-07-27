@@ -1,0 +1,36 @@
+
+public class Ball {
+	
+	private int speed;
+	private int ballSize;
+	private int ballX, ballY;
+	private int SCREEN_HEIGHT;
+	private int SCREEN_WIDTH;
+	private int VelocityX, velocityY;
+	
+	Ball(int ballSize, int ballX,int ballY,int SCREEN_HEIGHT,int SCREEN_WIDTH,int speed){
+		this.ballSize = ballSize;
+		this.ballX = ballX;
+		this.ballY = ballY;
+		this.speed = speed;
+		this.SCREEN_HEIGHT = SCREEN_HEIGHT;
+		this.SCREEN_WIDTH = SCREEN_WIDTH;
+	}
+	public void move() {
+		ballX +=velocityX;
+		ballY +=velocityY;
+		
+	}
+	public void collision() {
+		
+	}
+	public int getDimX() {
+		return ballSize;
+	}
+	public int getX() {
+		return ballX;
+	}
+	public int getY() {
+		return ballY;
+	}
+}

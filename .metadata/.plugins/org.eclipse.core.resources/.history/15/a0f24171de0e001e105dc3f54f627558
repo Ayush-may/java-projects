@@ -1,0 +1,283 @@
+import java.util.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.*;
+import javax.swing.Timer;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+public class GamePanel extends JPanel implements ActionListener , ChangeListener{
+	
+	static final int WIDTH = 800;
+	static final int HEIGHT = 400;
+	int delay = 0;
+	int unit = 5;
+	int block = WIDTH/unit;
+	int k,m;
+	int tempK,tempK2;
+	int tempT ;
+	public int currentIndex, previousIndex;
+	
+	Boolean bSort,iSort,sSort,mSort,qSort;
+	Boolean running = false;
+	
+	Timer timer, stopTimer;
+	String menuItem[] = {"Bubble Sort", "Insertion Sort", "Selection Sort", "Merge Sort", "Quick Sort"};
+	Random random = new Random();
+	Sort_Algo algo ;
+	
+	int[] check = new int[HEIGHT+1];
+	int[] color = new int[HEIGHT+1];
+	Node[] node = new Node[HEIGHT+1];
+	
+	JLabel bestTime = new JLabel("Best Time : (n)");
+	JLabel averageTime = new JLabel("Average Time : ");
+	JLabel worstTime = new JLabel("Worst Time : O(n^2)");
+	JLabel delayLabel = new JLabel("Delay : ");
+	JLabel sizeLabel = new JLabel("Size");
+	JButton startBtn = new JButton("START");
+	JButton stopBtn = new JButton("STOP");
+	JButton shuffleBtn = new JButton("Shuffle");
+	JComboBox menu = new JComboBox(menuItem);
+	JSlider delaySlider = new JSlider(0,10,delay);
+	JSlider sizeSlider = new JSlider(2,10,unit);
+	
+	GamePanel(){
+		this.setLayout(null);
+		this.setPreferredSize(new Dimension(WIDTH,HEIGHT));
+		this.setBackground(Color.BLACK);
+		
+		tempT = k = m = 0;
+		
+		bSort = true;
+		iSort = sSort = mSort = qSort = false;
+		algo = new Sort_Algo(block,color,node, currentIndex, previousIndex,k,m);
+		
+		this.add(bestTime);
+		this.add(averageTime);
+		this.add(worstTime);
+		this.add(startBtn);
+		this.add(stopBtn);
+		this.add(menu);
+		this.add(shuffleBtn);
+		this.add(delayLabel);
+		this.add(delaySlider);
+		this.add(sizeLabel);
+		this.add(sizeSlider);
+		
+		startBtn.setBounds(0,0,100,30);
+		stopBtn.setBounds(110,0,100,30);
+		menu.setBounds(220,0,100,30);
+		shuffleBtn.setBounds(330,0,100,30);
+		delaySlider.setBackground(Color.BLACK);
+		delaySlider.setBounds(440,10,100,30);
+		sizeSlider.setBackground(Color.BLACK);
+		sizeSlider.setBounds(550,10,100,30);
+		
+		bestTime.setForeground(Color.WHITE);
+		averageTime.setForeground(Color.WHITE);
+		worstTime.setForeground(Color.WHITE);
+		bestTime.setBounds(10,50,120,25);
+		averageTime.setBounds(10,70,120,25);
+		worstTime.setBounds(10,90,120,25);
+		
+		startBtn.addActionListener(this);
+		stopBtn.addActionListener(this);
+		shuffleBtn.addActionListener(this);
+		menu.addActionListener(this);
+		delaySlider.addChangeListener(this);
+		sizeSlider.addChangeListener(this);
+		
+		bSort = true ;
+		iSort = sSort = mSort = qSort = false;
+		
+		timer = new Timer(delay, new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int t = 0;
+				if(running) {
+					if(bSort) {
+						t = algo.bubbleSort();	
+					}
+					else if(iSort) {
+						t = algo.insertionSort();
+					}
+					else if(sSort) {
+						
+					}
+					else if(mSort) {
+						
+					}
+					else if(qSort) {
+						
+					}
+					if(t == 1) {
+						running = false;
+						timer.stop();
+//						stopTimer.start();
+					}
+				}
+				repaint();
+			}
+		});
+		
+		stopTimer = new Timer(10, new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				color[tempT] = 2;
+				tempT++;
+				repaint();
+				
+				if(tempT > block) {
+					stopTimer.stop();
+					tempT = 0;
+				}
+			}
+		});
+		
+		shuffle();
+	}
+	
+	public void shuffle() {
+		int xCod = 0;
+		tempT = 0;
+		node = new Node[HEIGHT+1];
+		color = new int[HEIGHT+1];
+		algo = new Sort_Algo(block,color,node, currentIndex, previousIndex,k,m);
+		init();
+		
+		for(int i=0;i<=block;i++) {
+			while(true) {
+				int temp = random.nextInt(HEIGHT);
+				if(check[temp] == -1 && temp > 60 && temp > 10){
+					check[temp] = 0;
+					node[i] = new Node(xCod,temp+unit);
+					xCod += unit;
+					break;
+				}
+			}
+		}
+		repaint();
+	}
+	
+	public void init() {
+		check = new int[HEIGHT+1];
+		for(int i=0;i<HEIGHT;i++) {
+			check[i] = -1;
+		}
+	}
+	
+	public void paint(Graphics g) {
+		super.paint(g);
+		
+		for(int i=0;i<block;i++) {
+			switch(color[i]) {
+				case 0:
+					g.setColor(Color.WHITE);
+					break;
+				case 1:	
+					g.setColor(Color.RED);
+					break;
+				case 2:
+					g.setColor(Color.GREEN);
+					break;
+		  }
+			
+			g.fillRect(node[i].getX(),node[i].getY(),unit,HEIGHT);
+//			g.setColor(Color.BLACK);
+//			g.drawRect(node[i].getX(),node[i].getY(),unit,HEIGHT);
+		}
+		
+//		g.setColor(Color.WHITE);
+//		g.drawLine(0,35,WIDTH,35);
+		
+//		if(running) {
+//			color[algo.returnCurrentIndex()] = 0;
+//		}
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		
+		if(e.getSource() == startBtn) {
+			running = true;
+			timer.restart();
+			stopTimer.stop();
+		}
+		
+		if(e.getSource() == stopBtn) {
+			running = false;
+			timer.stop();
+			stopTimer.stop();
+		}
+
+		if(e.getSource() == shuffleBtn) {
+			shuffle();
+		}
+		
+		if(e.getSource()==menu){
+			if("Bubble Sort"==menu.getSelectedItem()){
+				bSort = true ;
+				iSort = sSort = mSort = qSort = false;
+			}
+			if("Insertion Sort"==menu.getSelectedItem()){
+				iSort = true;
+				bSort = sSort = mSort = qSort = false;
+			}
+			if("Selection Sort"==menu.getSelectedItem()){
+				sSort = true;
+				bSort = iSort = mSort = qSort = false;
+			}
+			if("Merge Sort"==menu.getSelectedItem()){
+				mSort = true;
+				bSort = iSort = sSort = qSort = false;
+			}
+			if("Quick Sort"==menu.getSelectedItem()){
+				qSort = true;
+				bSort = iSort = sSort = mSort = false;
+			}
+		}
+		
+	}
+
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		if(e.getSource() == delaySlider) {
+			repaint();
+			delay = delaySlider.getValue();
+			timer.setDelay(delay);
+		}
+		if(e.getSource() == sizeSlider) {
+			unit = sizeSlider.getValue();
+			block = WIDTH/unit;
+			shuffle();
+		}
+	}
+	
+}
+
+
+//if(running) {
+//if(node[k].y < node[k+1].y) {
+//	int temp = node[k].y;
+//	node[k].y = node[k+1].y;
+//	node[k+1].y = temp;
+//	tempK = k;
+//	tempK2 = k+1;
+//	color[k] = 1;
+//}	
+//
+//if(m >= block-1) {
+//	running = false;
+//	stopTimer.start();
+//	timer.stop();	
+//	System.out.println("Timer Stop");
+//	k = m = 0;
+//}
+//
+//k++;
+//if(k >= block-1) {
+////			color[tempK2] = 2;
+//	k = 0;
+//	m++;
+//}
+//}

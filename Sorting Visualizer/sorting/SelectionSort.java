@@ -1,0 +1,51 @@
+
+public class SelectionSort extends Thread {
+
+	int block;
+	int[] color; 
+	Node[] node;
+	int check = 0;
+	int delay;
+	Boolean loopBreak = false;
+
+	SelectionSort(Node node[],int color[], int block,int check,int delay){
+		this.node = node;
+		this.color = color;
+		this.block = block;
+		this.check = check;
+		this.delay = delay;
+	}
+
+	public void run() {
+		selectionSort();
+	}
+	
+	public void selectionSort(){
+	    int i, j, min_idx;
+	    for (i = 0; i < block - 1; i++) {
+	        min_idx = i;
+	        if(loopBreak) {break;}
+	        for (j = i + 1; j < block; j++) {
+	            if (node[j].y < node[min_idx].y)
+	                min_idx = j;
+	       
+	            if(loopBreak) {break;}
+	        }
+	        sleep();
+	        if (min_idx != i) {
+	        	int temp = node[min_idx].y;
+	        	node[min_idx].y = node[i].y;
+	        	node[i].y = temp;
+	        }
+	    }
+	    check = 1;
+	    this.interrupt();
+	}
+	
+	public void sleep() { try{ Thread.sleep(delay);}catch(Exception e) {} }
+
+	public void setDelay( int delay ) { this.delay = delay; }
+
+	public int returnCheck() { return check; }
+	public void setBreak(boolean x) { loopBreak  = x; }
+}

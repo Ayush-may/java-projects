@@ -1,0 +1,25 @@
+
+public class Ball {
+	
+	private int ballSize;
+	private int ballX, ballY;
+	private int SCREEN_HEIGHT;
+	private int SCREEN_WIDTH;
+	
+	Ball(int ballSize, int ballX,int ballY,int SCREEN_HEIGHT,int SCREEN_WIDTH){
+		this.ballSize = ballSize;
+		this.ballX = ballX;
+		this.ballY = ballY;
+		this.SCREEN_HEIGHT = SCREEN_HEIGHT;
+		this.SCREEN_WIDTH = SCREEN_WIDTH;
+	}
+	public int getBallDimX() {
+		return ballSize;
+	}
+	public int getX() {
+		return ballX;
+	}
+	public int getY() {
+		return ballY;
+	}
+}
